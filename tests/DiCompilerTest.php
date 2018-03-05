@@ -6,15 +6,16 @@
  */
 namespace Ray\Compiler;
 
+use PHPUnit\Framework\TestCase;
 use Ray\Aop\WeavedInterface;
 use Ray\Compiler\Exception\NotCompiled;
 use Ray\Di\Name;
 
-class DiCompilerTest extends \PHPUnit_Framework_TestCase
+class DiCompilerTest extends TestCase
 {
     public function testNotCompiled()
     {
-        $this->setExpectedException(NotCompiled::class);
+        $this->expectException(NotCompiled::class);
         $injector = new ScriptInjector($_ENV['TMP_DIR']);
         $injector->getInstance(FakeCarInterface::class);
     }
