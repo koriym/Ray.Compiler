@@ -44,7 +44,7 @@
     },
     "extra": {
         "branch-alias": {
-            "self.version": "1.x-dev"
+            "1.x-dev": "self.version"
         }
     }
 }
