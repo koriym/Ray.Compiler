@@ -40,6 +40,9 @@ final class DiCompiler implements InjectorInterface
     /** @var FilePutContents */
     private $filePutContents;
 
+    /** @var CompileNullObject */
+    private $compiler;
+
     public function __construct(AbstractModule $module, string $scriptDir)
     {
         $this->scriptDir = $scriptDir ?: sys_get_temp_dir();
@@ -48,6 +51,7 @@ final class DiCompiler implements InjectorInterface
         $this->module = $module;
         $this->dependencySaver = new DependencySaver($scriptDir);
         $this->filePutContents = new FilePutContents();
+        $this->compiler = new CompileNullObject();
         $this->compileNullObject($this->container, $scriptDir);
 
         // Weave AssistedInterceptor and bind InjectorInterface for self
@@ -74,6 +78,7 @@ final class DiCompiler implements InjectorInterface
         $container = $this->container->getContainer();
         $scriptDir = $this->container->getInstance('', ScriptDir::class);
         assert(is_string($scriptDir));
+        ($this->compiler)($this->container, $scriptDir);
         foreach ($container as $dependencyIndex => $dependency) {
             $code = $this->dependencyCompiler->getCode($dependency, $scriptDir);
             ($this->dependencySaver)($dependencyIndex, $code);
