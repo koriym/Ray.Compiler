@@ -190,8 +190,6 @@ final class CompileInjector implements InjectorInterface
 
     private function compile(): void
     {
-        $module = (new InstallBuiltinModule())(($this->lazyModule)());
-        (new Bind($module->getContainer(), ''))->annotatedWith(ScriptDir::class)->toInstance($this->scriptDir);
-        (new DiCompiler($module, $this->scriptDir))->compile();
+        (new DiCompiler((new InstallBuiltinModule())(($this->lazyModule)()), $this->scriptDir))->compile();
     }
 }
