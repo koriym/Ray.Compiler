@@ -53,10 +53,14 @@ final class CompileInjector implements InjectorInterface
     /**
      * @param string              $scriptDir  generated instance script folder path
      * @param LazyModuleInterface $lazyModule callable variable which return AbstractModule instance
-     *
-     * @psalm-suppress UnresolvableInclude
      */
-    public function __construct($scriptDir, LazyModuleInterface $lazyModule)
+    public function __construct(string $scriptDir, LazyModuleInterface $lazyModule)
+    {
+        $this->init($scriptDir, $lazyModule);
+        $this->compile();
+    }
+
+    private function init(string $scriptDir, LazyModuleInterface $lazyModule): void
     {
         $this->scriptDir = rtrim($scriptDir, '/');
         $this->lazyModule = $lazyModule;
@@ -70,6 +74,7 @@ final class CompileInjector implements InjectorInterface
             function (string $dependencyIndex, array $injectionPoint = ['', '', '']) {
                 $this->ip = $injectionPoint; // @phpstan-ignore-line
                 [$prototype, $singleton, $injectionPoint, $injector] = $this->functions;
+
 
                 return require $this->getInstanceFile($dependencyIndex);
             };
@@ -114,7 +119,7 @@ final class CompileInjector implements InjectorInterface
 
     public function __wakeup()
     {
-        $this->__construct(
+        $this->init(
             $this->scriptDir,
             $this->lazyModule
         );
@@ -158,12 +163,7 @@ final class CompileInjector implements InjectorInterface
             return $file;
         }
 
-        $this->compile();
-        if (! file_exists($file)) {
-            throw new Unbound($dependencyIndex);
-        }
-
-        return $file;
+        throw new Unbound($dependencyIndex);
     }
 
     private function registerLoader(): void
@@ -188,7 +188,7 @@ final class CompileInjector implements InjectorInterface
         self::$scriptDirs[] = $this->scriptDir;
     }
 
-    public function compile(): void
+    private function compile(): void
     {
         $module = (new InstallBuiltinModule())(($this->lazyModule)());
         (new Bind($module->getContainer(), ''))->annotatedWith(ScriptDir::class)->toInstance($this->scriptDir);
