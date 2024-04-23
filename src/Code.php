@@ -7,7 +7,7 @@ namespace Ray\Compiler;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 
-final class Code
+class Code
 {
     /** @var bool */
     public $isSingleton;

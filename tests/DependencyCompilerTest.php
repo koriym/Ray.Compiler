@@ -51,7 +51,11 @@ EOT;
         $expected = <<<'EOT'
 <?php
 
-return array(1, 2, 3);
+return array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+);
 EOT;
         $this->assertContains((string) $code, [
             str_replace('array(1, 2, 3)', '[1, 2, 3]', $expected),
@@ -128,7 +132,7 @@ EOT;
         $expected = <<<'EOT'
 <?php
 
-return unserialize('O:23:"Ray\\Compiler\\FakeEngine":0:{}');
+return unserialize('O:23:"Ray\Compiler\FakeEngine":0:{}');
 EOT;
         $this->assertContains((string) $code, [
             str_replace('\\\\', '\\', $expected),
