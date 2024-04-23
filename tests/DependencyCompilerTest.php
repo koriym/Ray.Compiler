@@ -51,7 +51,11 @@ EOT;
         $expected = <<<'EOT'
 <?php
 
-return array(1, 2, 3);
+return array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+);
 EOT;
         $this->assertSame($expected, (string) $code);
     }
@@ -118,7 +122,7 @@ EOT;
         $expected = <<<'EOT'
 <?php
 
-return unserialize('O:23:"Ray\\Compiler\\FakeEngine":0:{}');
+return unserialize('O:23:"Ray\Compiler\FakeEngine":0:{}');
 EOT;
         $this->assertSame($expected, (string) $code);
     }

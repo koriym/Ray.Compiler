@@ -105,9 +105,7 @@ final class DependencyCode implements SetContextInterface
      */
     private function getInstanceCode(Instance $instance): Code
     {
-        $node = ($this->normalizer)($instance->value);
-
-        return new Code(new Node\Stmt\Return_($node), false);
+        return new StringCode($instance->value);
     }
 
     /**
