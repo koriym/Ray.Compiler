@@ -73,7 +73,7 @@ Add compile script to your `composer.json`:
 }
 ```
 
-### Warming Up Singletons
+### Warming Up Singletons on Coroutine Runtime Servers
 
 Compilation also generates `singletons.json`, a list of singleton bindings that can be instantiated without caller context. `CompiledInjector::warmup()` instantiates them all eagerly:
 
@@ -89,7 +89,6 @@ This is only needed for runtimes that handle requests concurrently within one pr
 An injection-point-dependent singleton would capture whichever consumer constructs it first, making the shared instance order-dependent. Such bindings must use prototype scope or remove the injection-point dependency.
 
 - Compilation throws `SingletonRequiresInjectionPoint` for an injection-point-dependent singleton.
-- `warmup()` throws `SingletonsFileNotFound` if `singletons.json` is missing. Recompile with the current Ray.Compiler version.
 
 ## Version Control
 
